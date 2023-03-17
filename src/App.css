@@ -1,38 +1,80 @@
+/* App */
 .App {
-  text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* editor */
+
+.RecordEditor_container {
+	border: 1px solid gray;
+	text-align: center;
+	padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.RecordEditor_container input,
+textarea {
+	margin-bottom: 20px;
+	width: 500px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.RecordEditor_container input {
+	padding: 10px;
+}
+.RecordEditor_container textarea {
+	padding: 10px;
+	height: 150px;
 }
 
-.App-link {
-  color: #61dafb;
+.RecordEditor_container select {
+	width: 300px;
+	padding: 10px;
+	margin-bottom: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.RecordEditor_container button {
+	width: 500px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+/*  List */
+
+.List_container {
+	border: 1px solid gray;
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.List h2 {
+	text-align: center;
+}
+
+/* List Item */
+
+.Item_container {
+	background-color: rgb(240, 240, 240);
+	margin-bottom: 10px;
+	padding: 20px;
+}
+
+.Item_container span {
+	margin-right: 10px;
+}
+
+.Item_container .info {
+	border-bottom: 1px solid gray;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+.Item_container .date {
+	color: gray;
+}
+
+.Item_container .content {
+	margin-bottom: 30px;
+	margin-top: 30px;
+	font-weight: bold;
+}
+
+.Item_container textarea {
+	padding: 10px;
 }
