@@ -1,82 +1,74 @@
-import React, { memo, useContext, useEffect, useRef, useState } from "react";
-import { DiaryDispatchContext } from "./App";
+import React, { useEffect, useRef, useState } from "react";
 
-const RecordEditor = () => {
-    const { onCreate } = useContext(DiaryDispatchContext);
+const RecordEditor = React.memo(({ onCreate }) => {
     useEffect(() => {
         console.log("RecordEditor 렌더");
     });
+    const authorInput = useRef();
+    const contentInput = useRef();
 
-    const [diary, setDiary] = useState({
+    const [state, setState] = useState({
         author: "",
         content: "",
         emotion: 1
     });
 
-    const handleChangeDiary = (e) => {
-        setDiary({
-            ...diary,
+    const handleChangeState = (e) => {
+        setState({
+            ...state,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleAddButtonClick = () => {
-        alert("일기가 추가되었어요!");
-        return;
-        console.log("추가될 일기 : ", diary);
-
-        if (diary.author.length < 1) {
-            authorRef.current.focus();
+    const handleSubmit = () => {
+        if (state.author.length < 1) {
+            authorInput.current.focus();
             return;
         }
 
-        if (diary.content.length < 1) {
-            contentRef.current.focus();
+        if (state.content.length < 5) {
+            contentInput.current.focus();
             return;
         }
 
-        onCreate(diary.author, diary.content, diary.emotion);
-        alert("일기가 성공적으로 추가되었습니다");
-
-        setDiary({
+        onCreate(state.author, state.content, state.emotion);
+        alert("저장 성공");
+        setState({
             author: "",
             content: "",
             emotion: 1
         });
     };
 
-    const authorRef = useRef(null);
-    const contentRef = useRef(null);
-
     return (
-        <div className="RecordEditor_container">
-            <h2>독서기록</h2>
+        <div className="RecordEditor">
+            <h2>독서록 작성</h2>
             <div>
                 <input
-                    ref={authorRef}
+                    ref={authorInput}
+                    value={state.author}
+                    onChange={handleChangeState}
                     name="author"
-                    placeholder="작성자"
+                    placeholder="저자"
                     type="text"
-                    value={diary.author}
-                    onChange={handleChangeDiary}
                 />
             </div>
             <div>
                 <textarea
-                    ref={contentRef}
+                    ref={contentInput}
+                    value={state.content}
+                    onChange={handleChangeState}
                     name="content"
-                    placeholder="서평을 남겨주세요."
+                    placeholder="서평을 남겨주세요. "
                     type="text"
-                    value={diary.content}
-                    onChange={handleChangeDiary}
                 />
             </div>
             <div>
-                <span>독서감상평 : </span>
+                <span>평점 : </span>
                 <select
                     name="emotion"
-                    value={diary.emotion}
-                    onChange={handleChangeDiary}
+                    value={state.emotion}
+                    onChange={handleChangeState}
                 >
                     <option value={1}>1</option>
                     <option value={2}>2</option>
@@ -86,10 +78,9 @@ const RecordEditor = () => {
                 </select>
             </div>
             <div>
-                <button onClick={handleAddButtonClick}>저장하기</button>
+                <button onClick={handleSubmit}>저장하기</button>
             </div>
         </div>
     );
-};
-
-export default memo(RecordEditor);
+});
+export default RecordEditor;
