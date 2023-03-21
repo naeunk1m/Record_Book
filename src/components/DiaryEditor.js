@@ -4,10 +4,8 @@ import { DiaryDispatchContext } from "./../App.js";
 import BookSearchModal from './BookSearchModal';
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
-import EmotionItem from "./EmotionItem";
 
 import { getStringDate } from "../util/date.js";
-import { emotionList } from "../util/emotion.js";
 
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
@@ -15,13 +13,10 @@ env.PUBLIC_URL = env.PUBLIC_URL || "";
 const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
-  const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
 
   const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
-  const handleClickEmote = useCallback((emotion) => {
-    setEmotion(emotion);
-  }, []);
+
   const navigate = useNavigate();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,9 +48,9 @@ const DiaryEditor = ({ isEdit, originData }) => {
       )
     ) {
       if (!isEdit) {
-        onCreate(date, content, emotion);
+        onCreate(date, content);
       } else {
-        onEdit(originData.id, date, content, emotion);
+        onEdit(originData.id, date, content);
       }
     }
 
@@ -72,7 +67,6 @@ const DiaryEditor = ({ isEdit, originData }) => {
   useEffect(() => {
     if (isEdit) {
       setDate(getStringDate(new Date(parseInt(originData.date))));
-      setEmotion(originData.emotion);
       setContent(originData.content);
     }
   }, [isEdit, originData]);
@@ -96,7 +90,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
       />
       <div>
         <section>
-          <h4>오늘은 언제인가요?</h4>
+          <h4>날짜를 등록해주세요.</h4>
           <div className="input_box">
             <input
               className="input_date"
@@ -106,7 +100,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
             />
           </div>
         </section>
-        <section>
+        {/* <section>
           <h4>오늘의 감정</h4>
           <div className="input_box emotion_list_wrapper">
             {emotionList.map((it) => (
@@ -118,7 +112,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
               />
             ))}
           </div>
-        </section>
+        </section> */}
         <section>
           <h4>책정보</h4>
           <div>
@@ -135,10 +129,10 @@ const DiaryEditor = ({ isEdit, originData }) => {
           </div>
         </section>
         <section>
-          <h4>오늘의 일기</h4>
+          <h4>서평을 작성해주세요. </h4>
           <div className="input_box text_wrapper">
             <textarea
-              placeholder="오늘은 어땠나요"
+              placeholder="서평을 작성해주세요."
               ref={contentRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}

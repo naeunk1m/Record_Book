@@ -65,7 +65,6 @@ function App() {
         id: dataId.current,
         date: new Date(date).getTime(),
         content,
-        emotion,
       },
     });
     dataId.current += 1;
@@ -75,14 +74,13 @@ function App() {
     dispatch({ type: "REMOVE", targetId });
   };
   // EDIT
-  const onEdit = (targetId, date, content, emotion) => {
+  const onEdit = (targetId, date, content) => {
     dispatch({
       type: "EDIT",
       data: {
         id: targetId,
         date: new Date(date).getTime(),
         content,
-        emotion,
       },
     });
   };
