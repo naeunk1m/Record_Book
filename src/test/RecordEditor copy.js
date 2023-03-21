@@ -43,7 +43,6 @@ const RecordEditor = React.memo(({ onCreate }) => {
     return (
         <div className="RecordEditor">
             <h2>독서록 작성</h2>
-
             <div>
                 <input
                     ref={authorInput}

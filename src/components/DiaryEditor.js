@@ -1,6 +1,8 @@
 import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { DiaryDispatchContext } from "./../App.js";
+import BookSearch from './BookSearch';
+import Book from './Book';
 
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
@@ -8,6 +10,8 @@ import EmotionItem from "./EmotionItem";
 
 import { getStringDate } from "../util/date.js";
 import { emotionList } from "../util/emotion.js";
+
+
 
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
@@ -23,6 +27,12 @@ const DiaryEditor = ({ isEdit, originData }) => {
     setEmotion(emotion);
   }, []);
   const navigate = useNavigate();
+
+  const [books, setBooks] = useState([]);
+
+  const handleAddBook = (book) => {
+    setBooks([...books, book]);
+  };
 
   const handleSubmit = () => {
     if (content.length < 1) {
@@ -100,6 +110,19 @@ const DiaryEditor = ({ isEdit, originData }) => {
                 isSelected={it.emotion_id === emotion}
               />
             ))}
+          </div>
+        </section>
+        <section>
+          <h4>도서 검색</h4>
+          <div>
+            <BookSearch onBookSelect={handleAddBook} />
+            <ul>
+              {books.map((book) => (
+                <li key={book.isbn}>
+                  <Book book={book} onAddBook={handleAddBook} />
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
         <section>
