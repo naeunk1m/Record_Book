@@ -26,39 +26,11 @@ function BookSearch(props) {
             });
     };
 
-    const [selectedBooks, setSelectedBooks] = useState([]);
-    const [selectedBooksComponents, setSelectedBooksComponents] = useState([]);
-
-    const handleSelectedBooksChange = (books, bookComponent) => {
-        setSelectedBooks(books);
-        setSelectedBooksComponents((components) => [...components, bookComponent]);
-    };
-
     const handleBookSelect = (book) => {
-
-
-        // 현재 선택된 책 목록에 추가합니다.
-        setSelectedBooks((selectedBooks) => [...selectedBooks, book]);
-
-        // 선택된 책 목록을 DiaryEditor 컴포넌트로 전달합니다.
-        props.onBookSelect(selectedBooks);
-
-        // 선택된 책을 DiaryEditor에서 표시할 때 사용할 컴포넌트를 생성합니다.
-        const bookComponent = (
-            <div key={book.isbn}>
-                <img src={book.thumbnail} alt={book.title} />
-                <div>{book.title}</div>
-                <div>{book.authors}</div>
-                <div>{book.publisher}</div>
-            </div>
-        );
-
-        // 선택된 책 목록과 새로운 책 추가 버튼을 DiaryEditor에 전달합니다.
-        props.onSelectedBooksChange(selectedBooks, bookComponent);
+        props.onBookSelect(book);
     };
 
     return (
-
         <div>
             <form onSubmit={handleSubmit}>
                 <label>
@@ -77,9 +49,6 @@ function BookSearch(props) {
                     </li>
                 ))}
             </ul>
-            <div>
-                {selectedBooksComponents}
-            </div>
         </div>
     );
 }
