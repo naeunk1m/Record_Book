@@ -6,7 +6,8 @@ import { getStringDate } from "../util/date";
 import MyHeader from "../components/MyHeader";
 import MyButton from "../components/MyButton";
 
-const Diary = () => {
+const Diary = (props) => {
+  const { books } = props;
   const { id } = useParams();
   const diaryList = useContext(DiaryStateContext);
   const navigate = useNavigate();
@@ -53,9 +54,17 @@ const Diary = () => {
         }
       />
       <article>
-
         <section>
-          <h4>오늘의 일기</h4>
+          <div>
+            <h3>Diary</h3>
+            <ul>
+              {books.map((book) => (
+                <li key={book.id}>{book.title}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+        <section>
           <div className="diary_content_wrapper">
             <p>{data.content}</p>
           </div>

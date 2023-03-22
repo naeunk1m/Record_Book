@@ -58,7 +58,7 @@ function App() {
 
   const dataId = useRef(0);
   // CREATE
-  const onCreate = (date, content, emotion) => {
+  const onCreate = (date, content) => {
     dispatch({
       type: "CREATE",
       data: {

@@ -8,11 +8,6 @@ const sortOptionList = [
   { value: "oldest", name: "오래된 순" },
 ];
 
-const filterOptionList = [
-  { value: "all", name: "전부다" },
-  { value: "good", name: "좋은 감정만" },
-  { value: "bad", name: "안좋은 감정만" },
-];
 
 const ControlMenu = React.memo(({ value, onChange, optionList }) => {
   return (
@@ -69,16 +64,12 @@ const DiaryList = ({ diaryList }) => {
             onChange={setSortType}
             optionList={sortOptionList}
           />
-          <ControlMenu
-            value={filter}
-            onChange={setFilter}
-            optionList={filterOptionList}
-          />
+
         </div>
         <div className="right_col">
           <MyButton
             type={"positive"}
-            text={"새 일기쓰기"}
+            text={"작성하기"}
             onClick={() => navigate("/new")}
           />
         </div>
