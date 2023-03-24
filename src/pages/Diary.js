@@ -6,17 +6,29 @@ import { getStringDate } from "../util/date";
 import MyHeader from "../components/MyHeader";
 import MyButton from "../components/MyButton";
 
-const Diary = (props) => {
-  const { books } = props;
+const Diary = () => {
   const { id } = useParams();
   const diaryList = useContext(DiaryStateContext);
   const navigate = useNavigate();
   const [data, setData] = useState();
+  const [selectedBook, setSelectedBook] = useState(null);
+
+  const handleBookSelect = (book) => {
+    setSelectedBook(book);
+    setData({
+      ...data,
+      bookId: book.isbn,
+      bookTitle: book.title,
+      bookThumbnail: book.thumbnail,
+    });
+  };
 
   useEffect(() => {
-    const titleElement = document.getElementsByTagName("title")[0];
-    titleElement.innerHTML = `감정 일기장 - ${id}번 일기`;
-  }, []);
+    document.title = `감정 일기장 - ${id}번 일기`;
+    return () => {
+      document.title = "감정 일기장";
+    };
+  }, [id]);
 
   useEffect(() => {
     if (diaryList.length >= 1) {
@@ -55,16 +67,23 @@ const Diary = (props) => {
       />
       <article>
         <section>
-          <div>
-            <h3>Diary</h3>
-            <ul>
-              {books.map((book) => (
-                <li key={book.id}>{book.title}</li>
-              ))}
-            </ul>
-          </div>
+          <h4>선택도서</h4>
+          {selectedBook && (
+            <div className="selected-book">
+              <img src={selectedBook.thumbnail} alt={selectedBook.title} />
+              <div>{selectedBook.title}</div>
+              <div>{selectedBook.authors}</div>
+              <div>{selectedBook.publisher}</div>
+            </div>
+          )}
+          {!selectedBook && (
+            <div className="selected-book">
+              <div>선택한 책이 없습니다.</div>
+            </div>
+          )}
         </section>
         <section>
+          <h4>오늘의 일기</h4>
           <div className="diary_content_wrapper">
             <p>{data.content}</p>
           </div>

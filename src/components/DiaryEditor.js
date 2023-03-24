@@ -1,7 +1,6 @@
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { DiaryDispatchContext } from "./../App.js";
-import Diary from "../pages/Diary.js";
 import BookSearchModal from './BookSearchModal';
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
@@ -11,7 +10,7 @@ import { getStringDate } from "../util/date.js";
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
 
-const DiaryEditor = ({ isEdit, originData }, props) => {
+const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [date, setDate] = useState(getStringDate(new Date()));
@@ -20,9 +19,9 @@ const DiaryEditor = ({ isEdit, originData }, props) => {
 
   const navigate = useNavigate();
 
-  const [books, setBooks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+
 
   const openModal = () => {
     setModalOpen(true);
@@ -35,11 +34,6 @@ const DiaryEditor = ({ isEdit, originData }, props) => {
   const handleBookSelect = (book) => {
     setSelectedBook(book);
     closeModal();
-    addBookToDiary(book);
-  };
-
-  const addBookToDiary = (book) => {
-    setBooks((prevBooks) => [...prevBooks, book]);
   };
 
 
@@ -107,16 +101,24 @@ const DiaryEditor = ({ isEdit, originData }, props) => {
             />
           </div>
         </section>
+
         <section>
           <h4>책정보</h4>
           <div>
-            <h2>Diary Editor</h2>
-            <Diary books={books} />
-            <BookSearchModal onBookSelect={handleBookSelect} />
+            <button onClick={openModal}>책 검색</button>
+            <BookSearchModal isOpen={modalOpen} onRequestClose={closeModal} onBookSelect={handleBookSelect} />
+            {selectedBook && (
+              <div>
+                <img src={selectedBook.thumbnail} alt={selectedBook.title} />
+                <div>{selectedBook.title}</div>
+                <div>{selectedBook.authors}</div>
+                <div>{selectedBook.publisher}</div>
+              </div>
+            )}
           </div>
         </section>
         <section>
-          <h4>서평작성</h4>
+          <h4>서평을 작성해주세요. </h4>
           <div className="input_box text_wrapper">
             <textarea
               placeholder="서평을 작성해주세요."
