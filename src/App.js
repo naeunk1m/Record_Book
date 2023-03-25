@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
+import DiaryEditor from "./components/DiaryEditor";
 
 const reducer = (state, action) => {
   let newState = [];
@@ -41,6 +42,7 @@ export const DiaryDispatchContext = React.createContext();
 
 function App() {
   const [data, dispatch] = useReducer(reducer, []);
+  const [book, setBook] = useState("");
 
   useEffect(() => {
     const localData = localStorage.getItem("diary");
@@ -86,26 +88,31 @@ function App() {
   };
 
   return (
-    <DiaryStateContext.Provider value={data}>
-      <DiaryDispatchContext.Provider
-        value={{
-          onCreate,
-          onEdit,
-          onRemove,
-        }}
-      >
-        <BrowserRouter>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/new" element={<New />} />
-              <Route path="/edit/:id" element={<Edit />} />
-              <Route path="/diary/:id" element={<Diary />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </DiaryDispatchContext.Provider>
-    </DiaryStateContext.Provider>
+    <div className="App">
+      {/* 이 부분에 JSX 엘리먼트 추가 */}
+      <DiaryEditor book={book} setBook={setBook} />
+      <Diary />
+      <DiaryStateContext.Provider value={data}>
+        <DiaryDispatchContext.Provider
+          value={{
+            onCreate,
+            onEdit,
+            onRemove,
+          }}
+        >
+          <BrowserRouter>
+            <div className="App">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/new" element={<New />} />
+                <Route path="/edit/:id" element={<Edit />} />
+                <Route path="/diary/:id" element={<Diary />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </DiaryDispatchContext.Provider>
+      </DiaryStateContext.Provider>
+    </div>
   );
 }
 

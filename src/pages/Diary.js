@@ -2,25 +2,22 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DiaryStateContext } from "../App";
 import { getStringDate } from "../util/date";
-
+import DiaryItem from "../components/DiaryItem";
 import MyHeader from "../components/MyHeader";
 import MyButton from "../components/MyButton";
+import axios from "axios";
 
 const Diary = () => {
   const { id } = useParams();
   const diaryList = useContext(DiaryStateContext);
   const navigate = useNavigate();
   const [data, setData] = useState();
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null); // 선택한 책 정보를 저장하는 상태 추가
+  const [diaries, setDiaries] = useState([]);
 
-  const handleBookSelect = (book) => {
+  // DiaryEditor.js에서 호출할 함수
+  const handleSelectedBook = (book) => {
     setSelectedBook(book);
-    setData({
-      ...data,
-      bookId: book.isbn,
-      bookTitle: book.title,
-      bookThumbnail: book.thumbnail,
-    });
   };
 
   useEffect(() => {
@@ -29,6 +26,14 @@ const Diary = () => {
       document.title = "감정 일기장";
     };
   }, [id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("/api/diaries");
+      setDiaries(result.data);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (diaryList.length >= 1) {
@@ -70,10 +75,13 @@ const Diary = () => {
           <h4>선택도서</h4>
           {selectedBook && (
             <div className="selected-book">
-              <img src={selectedBook.thumbnail} alt={selectedBook.title} />
-              <div>{selectedBook.title}</div>
-              <div>{selectedBook.authors}</div>
-              <div>{selectedBook.publisher}</div>
+              <div className="selected-book-cover">
+                <img src={selectedBook.thumbnail} alt="selected book cover" />
+              </div>
+              <div className="selected-book-info">
+                <p>{selectedBook.title}</p>
+                <p>{selectedBook.author}</p>
+              </div>
             </div>
           )}
           {!selectedBook && (

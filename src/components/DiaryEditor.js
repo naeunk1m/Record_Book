@@ -14,6 +14,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [date, setDate] = useState(getStringDate(new Date()));
+  const [book, setBook] = useState("");
 
   const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
 
@@ -22,6 +23,9 @@ const DiaryEditor = ({ isEdit, originData }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
 
+  function handleBookChange(event) {
+    setBook(event.target.value);
+  }
 
   const openModal = () => {
     setModalOpen(true);
@@ -33,9 +37,8 @@ const DiaryEditor = ({ isEdit, originData }) => {
 
   const handleBookSelect = (book) => {
     setSelectedBook(book);
-    closeModal();
+    console.log(selectedBook);
   };
-
 
   const handleSubmit = () => {
     if (content.length < 1) {
@@ -69,16 +72,20 @@ const DiaryEditor = ({ isEdit, originData }) => {
     if (isEdit) {
       setDate(getStringDate(new Date(parseInt(originData.date))));
       setContent(originData.content);
+      setSelectedBook({
+        isbn: originData.bookId,
+        title: originData.bookTitle,
+        thumbnail: originData.bookThumbnail,
+      });
     }
   }, [isEdit, originData]);
+
 
   return (
     <div className="DiaryEditor">
       <MyHeader
         headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
-        leftChild={
-          <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
-        }
+        leftChild={<MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />}
         rightChild={
           isEdit && (
             <MyButton
@@ -107,16 +114,19 @@ const DiaryEditor = ({ isEdit, originData }) => {
           <div>
             <button onClick={openModal}>책 검색</button>
             <BookSearchModal isOpen={modalOpen} onRequestClose={closeModal} onBookSelect={handleBookSelect} />
-            {selectedBook && (
+            {selectedBook ? (
               <div>
                 <img src={selectedBook.thumbnail} alt={selectedBook.title} />
                 <div>{selectedBook.title}</div>
                 <div>{selectedBook.authors}</div>
                 <div>{selectedBook.publisher}</div>
               </div>
+            ) : (
+              <div>선택된 책이 없습니다.</div>
             )}
           </div>
         </section>
+
         <section>
           <h4>서평을 작성해주세요. </h4>
           <div className="input_box text_wrapper">
@@ -128,6 +138,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
             />
           </div>
         </section>
+
         <section>
           <div className="control_box">
             <MyButton text={"취소하기"} onClick={() => navigate(-1)} />

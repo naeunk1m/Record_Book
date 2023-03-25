@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import MyButton from "./MyButton";
 
-const DiaryItem = ({ id, emotion, content, date }) => {
+const DiaryItem = ({ id, date, title, content, book }) => {
   const navigate = useNavigate();
 
   const env = process.env;
@@ -15,12 +15,21 @@ const DiaryItem = ({ id, emotion, content, date }) => {
   };
 
   const goEdit = () => {
-    navigate(`/edit/${id}`);
+    navigate('/edit/' + id);
   };
 
   return (
     <div className="DiaryItem">
-
+      <div className="book_info">
+        {book && book.thumbnail && (
+          <img src={book.thumbnail} alt={book.title} />
+        )}
+        <div className="info">
+          {book && book.title && (
+            <div className="book">책 제목: {book.title}</div>
+          )}
+        </div>
+      </div>
       <div onClick={goDetail} className="info_wrapper">
         <div className="diary_date">{strDate}</div>
         <div className="diary_content_preview">{content.slice(0, 25)}</div>
